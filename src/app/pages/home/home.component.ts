@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import Chart from 'chart.js/auto';
+import { Olympic } from '../../core/models/olympic.model';
 
 @Component({
   selector: 'app-home',
@@ -21,20 +22,17 @@ export class HomeComponent implements OnInit {
 
   constructor(private router: Router, private http: HttpClient) {}
 
-  ngOnInit() {
-    this.http.get<any[]>(this.olympicUrl).subscribe({
-      next: (data) => {
+  ngOnInit(): void {
+    this.http.get<Olympic[]>(this.olympicUrl).subscribe({
+      next: (data: Olympic[]) => {
         if (data && data.length > 0) {
           this.totalJOs = Array.from(
-            new Set(data.map((i: any) => i.participations.map((f: any) => f.year)).flat())
+            new Set(data.flatMap((olympic) => olympic.participations.map((p) => p.year)))
           ).length;
-          const countries: string[] = data.map((i: any) => i.country);
+          const countries: string[] = data.map((olympic) => olympic.country);
           this.totalCountries = countries.length;
-          const medals = data.map((i: any) =>
-            i.participations.map((i: any) => i.medalsCount)
-          );
-          const sumOfAllMedalsYears = medals.map((i) =>
-            i.reduce((acc: any, i: any) => acc + i, 0)
+          const sumOfAllMedalsYears: number[] = data.map((olympic) =>
+            olympic.participations.reduce((acc, p) => acc + p.medalsCount, 0)
           );
           this.buildPieChart(countries, sumOfAllMedalsYears);
         }
@@ -45,7 +43,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  buildPieChart(countries: string[], sumOfAllMedalsYears: number[]) {
+  buildPieChart(countries: string[], sumOfAllMedalsYears: number[]): void {
     const pieChart = new Chart('DashboardPieChart', {
       type: 'pie',
       data: {
