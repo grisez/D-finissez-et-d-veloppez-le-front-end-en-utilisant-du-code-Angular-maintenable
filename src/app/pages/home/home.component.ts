@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import Chart from 'chart.js/auto';
-import { Olympic } from '../../core/models/olympic.model';
+import { Olympic } from '../../models/olympic.model';
 
 @Component({
   selector: 'app-home',
