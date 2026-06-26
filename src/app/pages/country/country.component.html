@@ -1,30 +1,33 @@
-<div>
-  <div>
-    <div class="center">
-      <div>{{ titlePage }}</div>
-    </div>
-    <div class="split">
-      <div>
+<main>
+  <header class="center">
+    <h1>{{ titlePage }}</h1>
+  </header>
+
+  <section aria-label="Country statistics">
+    <ul class="split" aria-label="Key performance indicators">
+      <li>
         <p>Number of entries</p>
-        <p>{{ totalEntries }}</p>
-      </div>
-      <div>
-        <p>Total Number of medals</p>
-        <p>{{ totalMedals }}</p>
-      </div>
-      <div>
-        <p>Total Number of athletes</p>
-        <p>{{ totalAthletes }}</p>
-      </div>
-    </div>
-  </div>
-  <div class="chart-container wrapper-container">
-    <div class="container">
-      <canvas id="countryChart">{{ lineChart }}</canvas>
-      <h2>Date</h2>
-    </div>
-  </div>
-  <div class="center">
-    <a routerLink="">Go back</a>
-  </div>
-</div>
+        <strong>{{ totalEntries }}</strong>
+      </li>
+      <li>
+        <p>Total number of medals</p>
+        <strong>{{ totalMedals }}</strong>
+      </li>
+      <li>
+        <p>Total number of athletes</p>
+        <strong>{{ totalAthletes }}</strong>
+      </li>
+    </ul>
+  </section>
+
+  <section class="chart-container wrapper-container" aria-label="Medals per year chart">
+    <figure>
+      <canvas id="countryChart" role="img" [attr.aria-label]="'Line chart showing medal evolution per year for ' + titlePage"></canvas>
+      <figcaption>Medal evolution by year</figcaption>
+    </figure>
+  </section>
+
+  <nav aria-label="Page navigation">
+    <a routerLink="/">&#8592; Go back</a>
+  </nav>
+</main>

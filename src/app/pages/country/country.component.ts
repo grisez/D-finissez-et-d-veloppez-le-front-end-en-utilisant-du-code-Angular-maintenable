@@ -1,8 +1,8 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import Chart from 'chart.js/auto';
+import { OlympicService } from '../../services/olympic.service';
 import { Olympic } from '../../models/olympic.model';
 
 @Component({
@@ -13,8 +13,6 @@ import { Olympic } from '../../models/olympic.model';
   styleUrls: ['./country.component.scss'],
 })
 export class CountryComponent implements OnInit {
-  private olympicUrl = './assets/mock/olympic.json';
-  public lineChart!: Chart<'line', number[], number>;
   public titlePage: string = '';
   public totalEntries: number = 0;
   public totalMedals: number = 0;
@@ -24,37 +22,39 @@ export class CountryComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private http: HttpClient
+    private olympicService: OlympicService
   ) {}
 
   ngOnInit(): void {
-    let countryId: string | null = null;
-    this.route.paramMap.subscribe((param: ParamMap) => (countryId = param.get('id')));
-    this.http.get<Olympic[]>(this.olympicUrl).subscribe({
-      next: (data: Olympic[]) => {
-        if (data && data.length > 0) {
-          const selectedCountry = data.find((olympic) => olympic.country === countryId);
-          if (!selectedCountry) {
-            this.router.navigate(['/not-found']);
-            return;
-          }
-          this.titlePage = selectedCountry.country;
-          this.totalEntries = selectedCountry.participations.length;
-          this.totalMedals = selectedCountry.participations.reduce(
-            (acc, p) => acc + p.medalsCount,
-            0
-          );
-          this.totalAthletes = selectedCountry.participations.reduce(
-            (acc, p) => acc + p.athleteCount,
-            0
-          );
-          const years: number[] = selectedCountry.participations.map((p) => p.year);
-          const medals: number[] = selectedCountry.participations.map((p) => p.medalsCount);
-          this.buildChart(years, medals);
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+
+    if (isNaN(id)) {
+      this.router.navigate(['/not-found']);
+      return;
+    }
+
+    this.olympicService.getCountryById(id).subscribe({
+      next: (country: Olympic | undefined) => {
+        if (!country) {
+          this.router.navigate(['/not-found']);
+          return;
         }
+        this.titlePage = country.country;
+        this.totalEntries = country.participations.length;
+        this.totalMedals = country.participations.reduce(
+          (acc, p) => acc + p.medalsCount,
+          0
+        );
+        this.totalAthletes = country.participations.reduce(
+          (acc, p) => acc + p.athleteCount,
+          0
+        );
+        const years = country.participations.map((p) => p.year);
+        const medals = country.participations.map((p) => p.medalsCount);
+        this.buildChart(years, medals);
       },
-      error: (error: HttpErrorResponse) => {
-        this.error = error.message;
+      error: (err) => {
+        this.error = err.message;
       },
     });
   }
