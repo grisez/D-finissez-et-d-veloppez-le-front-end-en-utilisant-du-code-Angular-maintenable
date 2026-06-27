@@ -1,26 +1,14 @@
 <main>
-  <header class="center">
-    <h1>{{ titlePage }}</h1>
-  </header>
+  <app-header
+    [title]="titlePage"
+    [kpis]="[
+      { label: 'Number of entries', value: totalEntries },
+      { label: 'Total medals', value: totalMedals },
+      { label: 'Total athletes', value: totalAthletes }
+    ]">
+  </app-header>
 
-  <section aria-label="Country statistics">
-    <ul class="split" aria-label="Key performance indicators">
-      <li>
-        <p>Number of entries</p>
-        <strong>{{ totalEntries }}</strong>
-      </li>
-      <li>
-        <p>Total number of medals</p>
-        <strong>{{ totalMedals }}</strong>
-      </li>
-      <li>
-        <p>Total number of athletes</p>
-        <strong>{{ totalAthletes }}</strong>
-      </li>
-    </ul>
-  </section>
-
-  <section class="chart-container wrapper-container" aria-label="Medals per year chart">
+  <section class="chart-container" aria-label="Medals per year chart">
     <figure>
       <canvas id="countryChart" role="img" [attr.aria-label]="'Line chart showing medal evolution per year for ' + titlePage"></canvas>
       <figcaption>Medal evolution by year</figcaption>

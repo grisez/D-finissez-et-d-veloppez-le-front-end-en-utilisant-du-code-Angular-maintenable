@@ -1,0 +1,11 @@
+<header class="page-header">
+  <h1>{{ title }}</h1>
+  <ul class="kpi-list" aria-label="Key performance indicators">
+    @for (kpi of kpis; track kpi.label) {
+      <li class="kpi-item">
+        <span class="kpi-value">{{ kpi.value }}</span>
+        <span class="kpi-label">{{ kpi.label }}</span>
+      </li>
+    }
+  </ul>
+</header>

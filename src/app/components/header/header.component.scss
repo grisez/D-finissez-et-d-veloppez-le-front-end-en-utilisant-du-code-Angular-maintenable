@@ -1,0 +1,29 @@
+.page-header {
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+.kpi-list {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+}
+
+.kpi-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.kpi-value {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.kpi-label {
+  font-size: 0.9rem;
+}

@@ -1,21 +1,11 @@
 <main>
-  <header class="center">
-    <h1>Olympic games</h1>
-  </header>
-
-  <section aria-label="Global statistics">
-    <h2 class="center">{{ titlePage }}</h2>
-    <ul class="split" aria-label="Key performance indicators">
-      <li>
-        <p>Number of countries</p>
-        <strong>{{ totalCountries }}</strong>
-      </li>
-      <li>
-        <p>Number of JOs</p>
-        <strong>{{ totalJOs }}</strong>
-      </li>
-    </ul>
-  </section>
+  <app-header
+    [title]="titlePage"
+    [kpis]="[
+      { label: 'Number of countries', value: totalCountries },
+      { label: 'Number of JOs', value: totalJOs }
+    ]">
+  </app-header>
 
   <section aria-label="Medals per country chart">
     <canvas id="DashboardPieChart" role="img" aria-label="Pie chart showing total medals per country"></canvas>

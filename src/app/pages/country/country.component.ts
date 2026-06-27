@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import Chart from 'chart.js/auto';
 import { OlympicService } from '../../services/olympic.service';
 import { Olympic } from '../../models/olympic.model';
+import { HeaderComponent } from '../../components/header/header.component';
 
 @Component({
   selector: 'app-country',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink, HeaderComponent],
   templateUrl: './country.component.html',
   styleUrls: ['./country.component.scss'],
 })
