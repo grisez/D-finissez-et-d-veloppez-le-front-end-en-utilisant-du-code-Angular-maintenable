@@ -4,11 +4,12 @@ import Chart from 'chart.js/auto';
 import { OlympicService } from '../../services/olympic.service';
 import { Olympic } from '../../models/olympic.model';
 import { HeaderComponent } from '../../components/header/header.component';
+import { ErrorComponent } from '../../components/error/error.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HeaderComponent],
+  imports: [HeaderComponent, ErrorComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
@@ -16,7 +17,9 @@ export class HomeComponent implements OnInit {
   public pieChart!: Chart<'pie', number[], string>;
   public totalCountries: number = 0;
   public totalJOs: number = 0;
+  public loading: boolean = true;
   public error!: string;
+  public isEmpty: boolean = false;
   public titlePage: string = 'Medals per Country';
 
   constructor(private router: Router, private olympicService: OlympicService) {}
@@ -24,6 +27,11 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.olympicService.getOlympics().subscribe({
       next: (data: Olympic[]) => {
+        this.loading = false;
+        if (!data || data.length === 0) {
+          this.isEmpty = true;
+          return;
+        }
         this.totalJOs = Array.from(
           new Set(data.flatMap((o) => o.participations.map((p) => p.year)))
         ).length;
@@ -32,9 +40,10 @@ export class HomeComponent implements OnInit {
         const medals = data.map((o) =>
           o.participations.reduce((acc, p) => acc + p.medalsCount, 0)
         );
-        this.buildPieChart(data, countries, medals);
+        setTimeout(() => this.buildPieChart(data, countries, medals));
       },
       error: (err) => {
+        this.loading = false;
         this.error = err.message;
       },
     });

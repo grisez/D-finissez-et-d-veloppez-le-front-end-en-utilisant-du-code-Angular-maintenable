@@ -4,11 +4,12 @@ import Chart from 'chart.js/auto';
 import { OlympicService } from '../../services/olympic.service';
 import { Olympic } from '../../models/olympic.model';
 import { HeaderComponent } from '../../components/header/header.component';
+import { ErrorComponent } from '../../components/error/error.component';
 
 @Component({
   selector: 'app-country',
   standalone: true,
-  imports: [RouterLink, HeaderComponent],
+  imports: [RouterLink, HeaderComponent, ErrorComponent],
   templateUrl: './country.component.html',
   styleUrls: ['./country.component.scss'],
 })
@@ -17,7 +18,9 @@ export class CountryComponent implements OnInit {
   public totalEntries: number = 0;
   public totalMedals: number = 0;
   public totalAthletes: number = 0;
+  public loading: boolean = true;
   public error!: string;
+  public isEmpty: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,8 +38,13 @@ export class CountryComponent implements OnInit {
 
     this.olympicService.getCountryById(id).subscribe({
       next: (country: Olympic | undefined) => {
+        this.loading = false;
         if (!country) {
           this.router.navigate(['/not-found']);
+          return;
+        }
+        if (country.participations.length === 0) {
+          this.isEmpty = true;
           return;
         }
         this.titlePage = country.country;
@@ -51,9 +59,10 @@ export class CountryComponent implements OnInit {
         );
         const years = country.participations.map((p) => p.year);
         const medals = country.participations.map((p) => p.medalsCount);
-        this.buildChart(years, medals);
+        setTimeout(() => this.buildChart(years, medals));
       },
       error: (err) => {
+        this.loading = false;
         this.error = err.message;
       },
     });
