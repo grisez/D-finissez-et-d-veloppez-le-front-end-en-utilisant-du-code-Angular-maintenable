@@ -3,6 +3,8 @@
     <p class="state-message" role="status" aria-live="polite">Loading...</p>
   } @else if (error) {
     <app-error [message]="error"></app-error>
+  } @else if (isEmpty) {
+    <p class="state-message" role="status">No data available.</p>
   } @else {
     <app-header
       [title]="titlePage"

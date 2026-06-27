@@ -20,6 +20,7 @@ export class CountryComponent implements OnInit {
   public totalAthletes: number = 0;
   public loading: boolean = true;
   public error!: string;
+  public isEmpty: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,6 +41,10 @@ export class CountryComponent implements OnInit {
         this.loading = false;
         if (!country) {
           this.router.navigate(['/not-found']);
+          return;
+        }
+        if (country.participations.length === 0) {
+          this.isEmpty = true;
           return;
         }
         this.titlePage = country.country;

@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit {
   public totalJOs: number = 0;
   public loading: boolean = true;
   public error!: string;
+  public isEmpty: boolean = false;
   public titlePage: string = 'Medals per Country';
 
   constructor(private router: Router, private olympicService: OlympicService) {}
@@ -27,6 +28,10 @@ export class HomeComponent implements OnInit {
     this.olympicService.getOlympics().subscribe({
       next: (data: Olympic[]) => {
         this.loading = false;
+        if (!data || data.length === 0) {
+          this.isEmpty = true;
+          return;
+        }
         this.totalJOs = Array.from(
           new Set(data.flatMap((o) => o.participations.map((p) => p.year)))
         ).length;
