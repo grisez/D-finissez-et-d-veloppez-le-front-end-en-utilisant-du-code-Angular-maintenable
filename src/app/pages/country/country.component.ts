@@ -17,6 +17,7 @@ export class CountryComponent implements OnInit {
   public totalEntries: number = 0;
   public totalMedals: number = 0;
   public totalAthletes: number = 0;
+  public loading: boolean = true;
   public error!: string;
 
   constructor(
@@ -35,6 +36,7 @@ export class CountryComponent implements OnInit {
 
     this.olympicService.getCountryById(id).subscribe({
       next: (country: Olympic | undefined) => {
+        this.loading = false;
         if (!country) {
           this.router.navigate(['/not-found']);
           return;
@@ -51,9 +53,10 @@ export class CountryComponent implements OnInit {
         );
         const years = country.participations.map((p) => p.year);
         const medals = country.participations.map((p) => p.medalsCount);
-        this.buildChart(years, medals);
+        setTimeout(() => this.buildChart(years, medals));
       },
       error: (err) => {
+        this.loading = false;
         this.error = err.message;
       },
     });

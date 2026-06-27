@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
   public pieChart!: Chart<'pie', number[], string>;
   public totalCountries: number = 0;
   public totalJOs: number = 0;
+  public loading: boolean = true;
   public error!: string;
   public titlePage: string = 'Medals per Country';
 
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.olympicService.getOlympics().subscribe({
       next: (data: Olympic[]) => {
+        this.loading = false;
         this.totalJOs = Array.from(
           new Set(data.flatMap((o) => o.participations.map((p) => p.year)))
         ).length;
@@ -32,9 +34,10 @@ export class HomeComponent implements OnInit {
         const medals = data.map((o) =>
           o.participations.reduce((acc, p) => acc + p.medalsCount, 0)
         );
-        this.buildPieChart(data, countries, medals);
+        setTimeout(() => this.buildPieChart(data, countries, medals));
       },
       error: (err) => {
+        this.loading = false;
         this.error = err.message;
       },
     });

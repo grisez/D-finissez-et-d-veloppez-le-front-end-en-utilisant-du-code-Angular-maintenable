@@ -1,13 +1,17 @@
 <main>
-  <app-header
-    [title]="titlePage"
-    [kpis]="[
-      { label: 'Number of countries', value: totalCountries },
-      { label: 'Number of JOs', value: totalJOs }
-    ]">
-  </app-header>
+  @if (loading) {
+    <p class="state-message" role="status" aria-live="polite">Loading...</p>
+  } @else {
+    <app-header
+      [title]="titlePage"
+      [kpis]="[
+        { label: 'Number of countries', value: totalCountries },
+        { label: 'Number of JOs', value: totalJOs }
+      ]">
+    </app-header>
 
-  <section aria-label="Medals per country chart">
-    <canvas id="DashboardPieChart" role="img" aria-label="Pie chart showing total medals per country"></canvas>
-  </section>
+    <section aria-label="Medals per country chart">
+      <canvas id="DashboardPieChart" role="img" aria-label="Pie chart showing total medals per country"></canvas>
+    </section>
+  }
 </main>
