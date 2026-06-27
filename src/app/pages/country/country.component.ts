@@ -4,11 +4,12 @@ import Chart from 'chart.js/auto';
 import { OlympicService } from '../../services/olympic.service';
 import { Olympic } from '../../models/olympic.model';
 import { HeaderComponent } from '../../components/header/header.component';
+import { ErrorComponent } from '../../components/error/error.component';
 
 @Component({
   selector: 'app-country',
   standalone: true,
-  imports: [RouterLink, HeaderComponent],
+  imports: [RouterLink, HeaderComponent, ErrorComponent],
   templateUrl: './country.component.html',
   styleUrls: ['./country.component.scss'],
 })

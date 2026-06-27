@@ -1,6 +1,8 @@
 <main>
   @if (loading) {
     <p class="state-message" role="status" aria-live="polite">Loading...</p>
+  } @else if (error) {
+    <app-error [message]="error"></app-error>
   } @else {
     <app-header
       [title]="titlePage"
