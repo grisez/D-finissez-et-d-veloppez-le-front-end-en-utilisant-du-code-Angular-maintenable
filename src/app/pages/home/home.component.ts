@@ -50,32 +50,61 @@ export class HomeComponent implements OnInit {
   }
 
   buildPieChart(data: Olympic[], countries: string[], medals: number[]): void {
+    // Accessible high-contrast palette (WCAG AA on dark backgrounds)
+    const palette = [
+      '#818cf8', // indigo-400
+      '#22d3ee', // cyan-400
+      '#a78bfa', // violet-400
+      '#34d399', // emerald-400
+      '#fb923c', // orange-400
+      '#f472b6', // pink-400
+    ];
+
     const pieChart = new Chart('DashboardPieChart', {
       type: 'pie',
       data: {
         labels: countries,
-        datasets: [
-          {
-            label: 'Medals',
-            data: medals,
-            backgroundColor: ['#0b868f', '#adc3de', '#7a3c53', '#8f6263', 'orange', '#94819d'],
-            hoverOffset: 4,
-          },
-        ],
+        datasets: [{
+          label: 'Medals',
+          data: medals,
+          backgroundColor: palette,
+          borderColor: 'rgba(15,23,42,0.8)',
+          borderWidth: 2,
+          hoverOffset: 12,
+        }],
       },
       options: {
-        aspectRatio: 2.5,
+        aspectRatio: 2,
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: {
+              color: '#cbd5e1',
+              font: { family: 'Inter, system-ui, sans-serif', size: 13 },
+              padding: 16,
+              usePointStyle: true,
+              pointStyleWidth: 10,
+            },
+          },
+          tooltip: {
+            backgroundColor: 'rgba(15,23,42,0.9)',
+            borderColor: 'rgba(255,255,255,0.12)',
+            borderWidth: 1,
+            titleColor: '#f1f5f9',
+            bodyColor: '#94a3b8',
+            padding: 12,
+            callbacks: {
+              label: (ctx) => ` ${ctx.parsed} medals`,
+            },
+          },
+        },
         onClick: (e) => {
           if (e.native) {
             const points = pieChart.getElementsAtEventForMode(
-              e.native,
-              'point',
-              { intersect: true },
-              true
+              e.native, 'point', { intersect: true }, true
             );
             if (points.length) {
-              const index = points[0].index;
-              const countryId = data[index].id;
+              const countryId = data[points[0].index].id;
               this.router.navigate(['country', countryId]);
             }
           }

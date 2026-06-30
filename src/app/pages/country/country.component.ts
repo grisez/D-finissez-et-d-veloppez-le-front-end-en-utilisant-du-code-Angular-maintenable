@@ -69,21 +69,61 @@ export class CountryComponent implements OnInit {
   }
 
   buildChart(years: number[], medals: number[]): void {
+    const canvas = document.getElementById('countryChart') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+
+    // Gradient fill under the line
+    const gradient = ctx!.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(99,102,241,0.4)');
+    gradient.addColorStop(1, 'rgba(99,102,241,0.0)');
+
     new Chart('countryChart', {
       type: 'line',
       data: {
         labels: years,
-        datasets: [
-          {
-            label: 'Medals',
-            data: medals,
-            backgroundColor: '#0b868f',
-            borderColor: '#0b868f',
-          },
-        ],
+        datasets: [{
+          label: 'Medals',
+          data: medals,
+          borderColor: '#818cf8',
+          backgroundColor: gradient,
+          borderWidth: 2.5,
+          pointBackgroundColor: '#818cf8',
+          pointBorderColor: '#0f172a',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 8,
+          fill: true,
+          tension: 0.35,
+        }],
       },
       options: {
         aspectRatio: 2.5,
+        scales: {
+          x: {
+            ticks: { color: '#94a3b8', font: { family: 'Inter, system-ui, sans-serif' } },
+            grid: { color: 'rgba(255,255,255,0.06)' },
+            border: { color: 'rgba(255,255,255,0.1)' },
+          },
+          y: {
+            ticks: { color: '#94a3b8', font: { family: 'Inter, system-ui, sans-serif' } },
+            grid: { color: 'rgba(255,255,255,0.06)' },
+            border: { color: 'rgba(255,255,255,0.1)' },
+          },
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(15,23,42,0.9)',
+            borderColor: 'rgba(255,255,255,0.12)',
+            borderWidth: 1,
+            titleColor: '#f1f5f9',
+            bodyColor: '#94a3b8',
+            padding: 12,
+            callbacks: {
+              label: (ctx) => ` ${ctx.parsed.y} medals`,
+            },
+          },
+        },
       },
     });
   }
