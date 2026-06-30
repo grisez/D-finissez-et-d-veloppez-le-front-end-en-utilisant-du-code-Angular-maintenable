@@ -15,14 +15,14 @@
       ]">
     </app-header>
 
-    <section class="chart-container" aria-label="Medals per year chart">
+    <section class="chart-section" aria-label="Medals per year chart">
       <figure>
         <canvas id="countryChart" role="img" [attr.aria-label]="'Line chart showing medal evolution per year for ' + titlePage"></canvas>
         <figcaption>Medal evolution by year</figcaption>
       </figure>
     </section>
 
-    <nav aria-label="Page navigation">
+    <nav class="back-nav" aria-label="Page navigation">
       <a routerLink="/">&#8592; Go back</a>
     </nav>
   }
