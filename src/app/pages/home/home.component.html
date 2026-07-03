@@ -1,21 +1,25 @@
 <main>
-  @if (loading) {
-    <p class="state-message" role="status" aria-live="polite">Loading...</p>
-  } @else if (error) {
+  @if (error) {
     <app-error [message]="error"></app-error>
-  } @else if (isEmpty) {
-    <p class="state-message" role="status">No data available.</p>
   } @else {
-    <app-header
-      [title]="titlePage"
-      [kpis]="[
-        { label: 'Number of countries', value: totalCountries },
-        { label: 'Number of JOs', value: totalJOs }
-      ]">
-    </app-header>
+    @if (olympics$ | async; as olympics) {
+      @if (olympics.length === 0) {
+        <p class="state-message" role="status">No data available.</p>
+      } @else {
+        <app-header
+          [title]="titlePage"
+          [kpis]="[
+            { label: 'Number of countries', value: totalCountries },
+            { label: 'Number of JOs', value: totalJOs }
+          ]">
+        </app-header>
 
-    <section class="chart-section" aria-label="Medals per country chart">
-      <canvas id="DashboardPieChart" role="img" aria-label="Pie chart showing total medals per country"></canvas>
-    </section>
+        <section class="chart-section" aria-label="Medals per country chart">
+          <canvas id="DashboardPieChart" role="img" aria-label="Pie chart showing total medals per country"></canvas>
+        </section>
+      }
+    } @else {
+      <p class="state-message" role="status" aria-live="polite">Loading...</p>
+    }
   }
 </main>
