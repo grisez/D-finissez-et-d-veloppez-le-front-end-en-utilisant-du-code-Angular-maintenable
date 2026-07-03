@@ -1,8 +1,32 @@
-.center {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+main {
+  @apply flex flex-col items-center justify-center;
+  min-height: 80vh;
+  text-align: center;
+  padding: 2rem;
+
+  h1 {
+    font-size: var(--font-size-2xl);
+    color: var(--color-text);
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+  }
+
+  a {
+    @apply inline-flex items-center gap-2;
+    font-weight: 500;
+    padding: 0.6rem 1.25rem;
+    background: var(--color-primary);
+    color: white;
+    border-radius: var(--radius-md);
+    transition: background 0.2s;
+
+    &:hover {
+      background: var(--color-primary-dark);
+      text-decoration: none;
+    }
+  }
 }

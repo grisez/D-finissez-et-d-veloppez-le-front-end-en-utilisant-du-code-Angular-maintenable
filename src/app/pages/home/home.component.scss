@@ -1,0 +1,20 @@
+@use '../../../styles/mixins' as *;
+
+main {
+  display: flex;
+  flex-direction: column;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem 1.5rem;
+  min-height: 100vh;
+}
+
+.chart-section {
+  @include glass;
+  padding: 2rem 2.5rem;
+
+  canvas {
+    height: 50vh !important;
+    cursor: pointer;
+  }
+}
