@@ -50,14 +50,14 @@ export class HomeComponent implements OnInit {
   }
 
   buildPieChart(data: Olympic[], countries: string[], medals: number[]): void {
-    // Accessible high-contrast palette (WCAG AA on dark backgrounds)
+    // Pastel palette — hues spaced exactly 60° apart for colorblind accessibility
     const palette = [
-      '#818cf8', // indigo-400
-      '#22d3ee', // cyan-400
-      '#a78bfa', // violet-400
-      '#34d399', // emerald-400
-      '#fb923c', // orange-400
-      '#f472b6', // pink-400
+      '#ffadad', // pastel red     (0°)
+      '#fdffb6', // pastel yellow  (60°)
+      '#caffbf', // pastel green   (120°)
+      '#9bf6ff', // pastel cyan    (180°)
+      '#a0c4ff', // pastel blue    (240°)
+      '#ffc6ff', // pastel pink    (300°)
     ];
 
     const pieChart = new Chart('DashboardPieChart', {
@@ -74,16 +74,21 @@ export class HomeComponent implements OnInit {
         }],
       },
       options: {
-        aspectRatio: 2,
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: 20,
+        },
         plugins: {
           legend: {
-            position: 'right',
+            position: 'bottom',
             labels: {
               color: '#cbd5e1',
               font: { family: 'Inter, system-ui, sans-serif', size: 13 },
               padding: 16,
               usePointStyle: true,
               pointStyleWidth: 10,
+              boxWidth: 12,
             },
           },
           tooltip: {
