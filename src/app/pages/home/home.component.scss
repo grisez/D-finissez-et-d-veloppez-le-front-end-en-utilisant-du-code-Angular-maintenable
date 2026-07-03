@@ -11,10 +11,10 @@ main {
 
 .chart-section {
   @include glass;
-  padding: 1.25rem;
+  padding: 2rem 2.5rem;
 
   canvas {
-    max-height: 55vh;
+    height: 50vh !important;
     cursor: pointer;
   }
 }
