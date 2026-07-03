@@ -1,29 +1,33 @@
 <main>
-  @if (loading) {
-    <p class="state-message" role="status" aria-live="polite">Loading...</p>
-  } @else if (error) {
+  @if (error) {
     <app-error [message]="error"></app-error>
-  } @else if (isEmpty) {
-    <p class="state-message" role="status">No data available for this country.</p>
   } @else {
-    <app-header
-      [title]="titlePage"
-      [kpis]="[
-        { label: 'Number of entries', value: totalEntries },
-        { label: 'Total medals', value: totalMedals },
-        { label: 'Total athletes', value: totalAthletes }
-      ]">
-    </app-header>
+    @if (country$ | async; as country) {
+      @if (country.participations.length === 0) {
+        <p class="state-message" role="status">No data available for this country.</p>
+      } @else {
+        <app-header
+          [title]="titlePage"
+          [kpis]="[
+            { label: 'Number of entries', value: totalEntries },
+            { label: 'Total medals', value: totalMedals },
+            { label: 'Total athletes', value: totalAthletes }
+          ]">
+        </app-header>
 
-    <section class="chart-section" aria-label="Medals per year chart">
-      <figure>
-        <canvas id="countryChart" role="img" [attr.aria-label]="'Line chart showing medal evolution per year for ' + titlePage"></canvas>
-        <figcaption>Medal evolution by year</figcaption>
-      </figure>
-    </section>
+        <section class="chart-section" aria-label="Medals per year chart">
+          <figure>
+            <canvas id="countryChart" role="img" [attr.aria-label]="'Line chart showing medal evolution per year for ' + titlePage"></canvas>
+            <figcaption>Medal evolution by year</figcaption>
+          </figure>
+        </section>
 
-    <nav class="back-nav" aria-label="Page navigation">
-      <a routerLink="/">&#8592; Go back</a>
-    </nav>
+        <nav class="back-nav" aria-label="Page navigation">
+          <a routerLink="/">&#8592; Go back</a>
+        </nav>
+      }
+    } @else {
+      <p class="state-message" role="status" aria-live="polite">Loading...</p>
+    }
   }
 </main>
