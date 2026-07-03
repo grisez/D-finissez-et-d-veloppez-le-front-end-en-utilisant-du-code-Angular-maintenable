@@ -1,55 +1,99 @@
-# TéléSport — Olympic Games
+# TéléSport — Olympic Games Dashboard
 
-An Angular application for TéléSport, a French national TV channel, displaying Olympic Games performance data by country.
+Application Angular affichant les résultats des Jeux Olympiques (médailles par pays, évolution par année).
 
-## Prerequisites
+---
 
-- Node.js >= 18
-- npm >= 9
-- Angular CLI 18
+## Installation
 
 ```bash
+git clone <repo-url>
+cd olympic-games-starter
 npm install
 ```
 
-## Development server
+## Scripts
 
-```bash
-ng serve
+| Commande | Description |
+|----------|-------------|
+| `npm start` | Lance le serveur de développement (`http://localhost:4200`) |
+| `npm run build` | Build de production dans `dist/` |
+
+---
+
+## Structure du projet
+
+```
+src/
+├── styles/
+│   └── _mixins.scss          # Mixin glassmorphism
+├── styles.scss               # Design tokens (CSS custom properties) + Tailwind
+└── app/
+    ├── models/               # Interfaces TypeScript (Olympic, Participation)
+    ├── services/             # OlympicService — source unique de données
+    ├── components/
+    │   ├── header/           # Composant réutilisable : titre + KPIs
+    │   └── error/            # Composant réutilisable : message d'erreur
+    └── pages/
+        ├── home/             # Dashboard — route /
+        ├── country/          # Détail pays — route /country/:id
+        └── not-found/        # Page 404 — route **
 ```
 
-Navigate to `http://localhost:4200/`.
+---
 
-## Build
+## Stack technique
 
-```bash
-ng build
-```
+- **Angular 18** — standalone components, control flow (`@if` / `@for`)
+- **TypeScript strict** — zéro `any`, interfaces typées
+- **RxJS** — `Observable`, `shareReplay(1)`, `| async` pipe, `catchError`
+- **Chart.js 4** — pie chart (dashboard) + line chart (détail pays)
+- **Tailwind CSS** — via `@apply` dans les fichiers SCSS uniquement
+- **SCSS** — design tokens CSS custom properties, glassmorphism
 
-Build artifacts are stored in `dist/`.
+## Design patterns
+
+- **Singleton** : `OlympicService` (`providedIn: 'root'`)
+- **Observer** : `Observable` RxJS — composants abonnés via `| async`
+- **Smart / Dumb components** : pages (smart) → composants réutilisables via `@Input()`
+
+---
 
 ## Pages
 
-| Route | Description |
-|-------|-------------|
-| `/` | Dashboard — pie chart of medals by country + KPIs |
-| `/country/:id` | Country detail — line chart + participations, medals, athletes |
-| `/not-found` | 404 page |
+### Dashboard `/`
+- Pie chart — médailles totales par pays (palette colorblind-safe)
+- KPIs : nombre de pays, nombre d'éditions JO
+- Clic sur un pays → navigation vers la page détail
 
-## Architecture
+### Détail pays `/country/:id`
+- Line chart — évolution des médailles par année
+- KPIs : participations, médailles totales, athlètes totaux
+- ID invalide ou pays introuvable → redirection `/not-found`
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full technical architecture.
+---
 
-## Tech Stack
+## Gestion des erreurs
 
-- Angular 18 — standalone components, lazy loading
-- TypeScript 5.4 — strict mode, zero `any`
-- RxJS 7.8
-- Chart.js 4
-- SCSS
+| Cas | Comportement |
+|-----|-------------|
+| Données vides | Message "No data available" |
+| Erreur HTTP | `ErrorComponent` avec message + lien retour |
+| ID pays invalide | Redirection `/not-found` |
+| URL inconnue | Redirection `/not-found` |
 
-## Git Strategy
+---
 
-Gitflow — `main` / `develop` / `feat*` / `refactor*` / `fix*` / `docs*`
+## Limites connues
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md#git-strategy) for details.
+- Les données sont mockées (fichier `assets/mock/olympic.json`) — pas de backend réel
+- Pas de tests unitaires
+- Pas d'authentification
+
+---
+
+## Documentation
+
+- [`ARCHITECTURE.md`](./ARCHITECTURE.md) — architecture détaillée, design system, décisions techniques
+- [`notes-architecture.md`](./notes-architecture.md) — analyse du starter code, problèmes identifiés
+- [`docs/architecture-diagram.svg`](./docs/architecture-diagram.svg) — diagramme de composants UML
