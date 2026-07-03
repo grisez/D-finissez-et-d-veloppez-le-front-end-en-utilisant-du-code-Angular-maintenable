@@ -5,9 +5,10 @@
 - Angular 18 (standalone components)
 - TypeScript strict (no `any`)
 - RxJS (Observables + `async` pipe)
-- Chart.js (pie + line charts)
-- SCSS
-- Angular Router
+- Chart.js 4 (pie + line charts)
+- Tailwind CSS (via `@apply` in SCSS only — no utility classes in HTML)
+- SCSS + CSS custom properties (design tokens)
+- Angular Router (lazy loading)
 - HttpClient (local JSON file)
 
 ---
@@ -15,25 +16,26 @@
 ## 2. Project Structure
 
 ```
-src/app/
-├── models/
-│   ├── olympic.model.ts          # Olympic interface
-│   └── participation.model.ts    # Participation interface
-│
-├── services/
-│   └── olympic.service.ts        # Single source of truth
-│
-├── components/
-│   └── header/                   # Reusable header component
-│
-├── pages/
-│   ├── dashboard/                # Route /
-│   ├── country-detail/           # Route /country/:id
-│   └── not-found/                # Route **
-│
-├── app.component.ts              # Root component (router-outlet only)
-├── app.config.ts                 # provideRouter + provideHttpClient
-└── app.routes.ts                 # Lazy-loaded routes
+src/
+├── styles/
+│   └── _mixins.scss              # Glass mixin
+├── styles.scss                   # Design tokens, base reset, Tailwind directives
+└── app/
+    ├── models/
+    │   ├── olympic.model.ts
+    │   └── participation.model.ts
+    ├── services/
+    │   └── olympic.service.ts    # Single source of truth
+    ├── components/
+    │   ├── header/               # Reusable header (title + KPIs)
+    │   └── error/                # Reusable error message
+    ├── pages/
+    │   ├── dashboard/            # Route /
+    │   ├── country-detail/       # Route /country/:id
+    │   └── not-found/            # Route **
+    ├── app.component.ts
+    ├── app.config.ts
+    └── app.routes.ts
 ```
 
 ---
@@ -43,29 +45,31 @@ src/app/
 ### Standalone components
 All components use `standalone: true`. No NgModule. Bootstrap via `bootstrapApplication`.
 
+### Lazy loading
+Every page loaded on demand via `loadComponent` in `app.routes.ts`.
+
 ### Data flow
 ```
 olympic.json (local)
       │
       ▼
-OlympicService (single source of truth)
+OlympicService  ──  shareReplay(1)
       │
       ▼
-RxJS Observable
+Observable
       │
       ▼
-async pipe (templates)
+Component (subscribe in ngOnInit)
       │
       ▼
-UI components
+Template (@if / @for)
 ```
-
-- No manual `subscribe` in components
-- Unidirectional data flow
-- No data duplication between pages
 
 ### Strict TypeScript
 `strict: true` — zero `any` — all data typed via `Olympic` and `Participation` interfaces.
+
+### Tailwind usage
+Tailwind is used **only via `@apply`** inside SCSS files. HTML templates contain no Tailwind utility classes — keeping templates clean and readable.
 
 ---
 
@@ -94,16 +98,20 @@ interface Olympic {
 ### HeaderComponent (reusable)
 - `@Input() title: string`
 - `@Input() kpis: { label: string; value: number }[]`
-- Used on Dashboard and Country detail pages
+- Used on Dashboard and CountryDetail pages
+
+### ErrorComponent (reusable)
+- `@Input() message: string`
+- Used on Dashboard and CountryDetail pages
 
 ### DashboardPage `/`
-- Pie chart — medals per country
+- Pie chart — medals per country (colorblind-safe pastel palette)
 - KPIs: number of countries, number of Olympic editions
 - Click on chart slice → navigate to `/country/:id`
 
 ### CountryDetailPage `/country/:id`
 - KPIs: participations, total medals, total athletes
-- Line chart — medals per year
+- Line chart — medals per year with gradient fill
 - Invalid ID → redirect to `/not-found`
 - Back button → `/`
 
@@ -119,78 +127,73 @@ interface Olympic {
 
 ## 7. UI States
 
-Every page handles three states:
-
 | State | Display |
 |-------|---------|
-| Loading | Spinner / skeleton |
+| Loading | "Loading..." message |
 | Empty | "No data available" message |
-| Error | Error message + fallback |
+| Error | `ErrorComponent` with message + back link |
 
 ---
 
-## 8. Responsive Design
+## 8. Design System
 
-| Breakpoint | Columns |
-|------------|---------|
-| ≥ 1200px | 12 columns |
-| 768–1199px | 8 columns |
-| ≤ 767px | 4 columns (stacked) |
+Dark glassmorphism theme with CSS custom properties:
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--color-primary` | `#6366f1` | Indigo — gradients, accents |
+| `--color-secondary` | `#06b6d4` | Cyan — links, hover |
+| `--color-bg` | `#0f172a` | Page background |
+| `--color-surface` | `rgba(255,255,255,0.06)` | Glass cards |
+| `--color-text` | `#f1f5f9` | Main text (15:1 contrast) |
+| `--color-text-muted` | `#cbd5e1` | Secondary text (7.5:1 contrast) |
+
+Charts use a **colorblind-safe pastel palette** with hues spaced 60° apart.
 
 ---
 
 ## 9. Accessibility
 
-- `aria-label` on interactive elements
-- Visible focus indicators
-- Minimum AA color contrast
-- Text alternatives for charts
+- Semantic HTML (`main`, `section`, `header`, `nav`, `figure`, `ul/li`)
+- `aria-label` on sections and charts
+- `role="status"` on loading/empty states
+- `role="alert"` on error messages
+- Text contrast WCAG AA compliant (≥ 4.5:1)
+- Focus visible on all interactive elements
 
 ---
 
-## 10. Routing
+## 10. Responsive Design
 
-| Path | Page | Description |
-|------|------|-------------|
-| `/` | DashboardPage | Pie chart + global KPIs |
-| `/country/:id` | CountryDetailPage | Line chart + country KPIs |
-| `/not-found` | NotFoundPage | Explicit 404 |
-| `**` | NotFoundPage | Wildcard fallback |
-
----
-
-## 11. Git Strategy
-
-Gitflow:
-- `main` — production, never committed to directly
-- `develop` — integration branch, base for all feature branches
-- `feat/*` — new features
-- `refactor/*` — refactoring
-- `fix/*` — bug fixes
-- `docs/*` — documentation only
-
-Atomic commits only. Convention: `feat:` / `fix:` / `refactor:` / `docs:` / `chore:`
+| Breakpoint | Layout |
+|------------|--------|
+| ≥ 1024px | Pie chart legend on right |
+| < 1024px | Pie chart legend on bottom |
+| All | Chart.js `responsive: true` — auto-resizes |
 
 ---
 
-## 12. Out of Scope
+## 11. Routing
+
+| Path | Page |
+|------|------|
+| `/` | DashboardPage |
+| `/country/:id` | CountryDetailPage |
+| `/not-found` | NotFoundPage |
+| `**` | NotFoundPage |
+
+---
+
+## 12. Git Strategy
+
+Gitflow — `main` / `develop` / `feat*` / `refactor*` / `fix*` / `docs*`
+
+Atomic commits — convention: `feat:` / `fix:` / `refactor:` / `docs:` / `chore:`
+
+---
+
+## 13. Out of Scope
 
 - No authentication
 - No backend / database
-- No unit tests (not required)
-
----
-
-## 13. Roadmap
-
-| Step | Branch | Status |
-|------|--------|--------|
-| Standalone migration | `refactor/standalone-migration` | ✅ Done |
-| TypeScript models | `feat/add-typescript-models-and-strict-typing` | ✅ Done |
-| Documentation | `docs/architecture-and-readme` | 🔄 In progress |
-| OlympicService | `feat/olympic-service` | ⏳ Pending |
-| Dashboard page | `feat/dashboard-page` | ⏳ Pending |
-| Country detail page | `feat/country-detail-page` | ⏳ Pending |
-| Header component | `feat/header-component` | ⏳ Pending |
-| Loading / error states | `feat/loading-error-states` | ⏳ Pending |
-| Responsive + a11y | `feat/responsive-and-a11y` | ⏳ Pending |
+- No unit tests
