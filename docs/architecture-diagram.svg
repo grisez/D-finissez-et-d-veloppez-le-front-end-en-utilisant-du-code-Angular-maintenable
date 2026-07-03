@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 700" font-family="Segoe UI, system-ui, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#6366f1"/>
+    </marker>
+    <marker id="arr-cyan" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#06b6d4"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="860" height="700" fill="#0f172a"/>
+
+  <!-- Title -->
+  <text x="430" y="36" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">TéléSport — Diagramme de Composants Angular</text>
+
+  <!-- ══════════════════════════════════════════
+       APP COMPONENT (root)
+  ══════════════════════════════════════════ -->
+  <rect x="305" y="60" width="250" height="52" rx="6" fill="#1e293b" stroke="#6366f1" stroke-width="2"/>
+  <rect x="305" y="60" width="250" height="20" rx="6" fill="#6366f1"/>
+  <rect x="305" y="73" width="250" height="7" fill="#6366f1"/>
+  <text x="430" y="74" text-anchor="middle" fill="white" font-size="11" font-weight="700">«component»</text>
+  <text x="430" y="92" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">AppComponent</text>
+  <text x="430" y="107" text-anchor="middle" fill="#94a3b8" font-size="10">RouterOutlet</text>
+
+  <!-- Arrow: App → Router -->
+  <line x1="430" y1="112" x2="430" y2="148" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ══════════════════════════════════════════
+       ANGULAR ROUTER
+  ══════════════════════════════════════════ -->
+  <rect x="255" y="148" width="350" height="44" rx="6" fill="#1e293b" stroke="#e879f9" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="430" y="167" text-anchor="middle" fill="#f0abfc" font-size="11" font-weight="700">«router» Angular Router</text>
+  <text x="430" y="183" text-anchor="middle" fill="#94a3b8" font-size="9">/ · /country/:id · /not-found · ** — lazy loadComponent()</text>
+
+  <!-- Arrows: Router → 3 pages -->
+  <line x1="320" y1="192" x2="175" y2="248" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="430" y1="192" x2="430" y2="248" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="540" y1="192" x2="685" y2="248" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: HomeComponent
+  ══════════════════════════════════════════ -->
+  <rect x="55" y="248" width="240" height="110" rx="6" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+  <rect x="55" y="248" width="240" height="20" rx="6" fill="#10b981"/>
+  <rect x="55" y="261" width="240" height="7" fill="#10b981"/>
+  <text x="175" y="262" text-anchor="middle" fill="white" font-size="10" font-weight="700">«page component»</text>
+  <text x="175" y="280" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">HomeComponent</text>
+  <line x1="65" y1="290" x2="285" y2="290" stroke="#1e3a2f" stroke-width="1"/>
+  <text x="175" y="303" text-anchor="middle" fill="#94a3b8" font-size="10">olympics$: Observable&lt;Olympic[]&gt;</text>
+  <text x="175" y="317" text-anchor="middle" fill="#94a3b8" font-size="10">totalCountries: number</text>
+  <text x="175" y="331" text-anchor="middle" fill="#94a3b8" font-size="10">totalJOs: number</text>
+  <line x1="65" y1="339" x2="285" y2="339" stroke="#1e3a2f" stroke-width="1"/>
+  <text x="175" y="352" text-anchor="middle" fill="#94a3b8" font-size="10">buildPieChart() — Chart.js</text>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: CountryComponent
+  ══════════════════════════════════════════ -->
+  <rect x="565" y="248" width="240" height="110" rx="6" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+  <rect x="565" y="248" width="240" height="20" rx="6" fill="#10b981"/>
+  <rect x="565" y="261" width="240" height="7" fill="#10b981"/>
+  <text x="685" y="262" text-anchor="middle" fill="white" font-size="10" font-weight="700">«page component»</text>
+  <text x="685" y="280" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">CountryComponent</text>
+  <line x1="575" y1="290" x2="795" y2="290" stroke="#1e3a2f" stroke-width="1"/>
+  <text x="685" y="303" text-anchor="middle" fill="#94a3b8" font-size="10">country$: Observable&lt;Olympic&gt;</text>
+  <text x="685" y="317" text-anchor="middle" fill="#94a3b8" font-size="10">totalMedals · totalAthletes</text>
+  <text x="685" y="331" text-anchor="middle" fill="#94a3b8" font-size="10">totalEntries: number</text>
+  <line x1="575" y1="339" x2="795" y2="339" stroke="#1e3a2f" stroke-width="1"/>
+  <text x="685" y="352" text-anchor="middle" fill="#94a3b8" font-size="10">buildChart() — Chart.js</text>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: NotFoundComponent
+  ══════════════════════════════════════════ -->
+  <rect x="330" y="248" width="200" height="75" rx="6" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+  <rect x="330" y="248" width="200" height="20" rx="6" fill="#10b981"/>
+  <rect x="330" y="261" width="200" height="7" fill="#10b981"/>
+  <text x="430" y="262" text-anchor="middle" fill="white" font-size="10" font-weight="700">«page component»</text>
+  <text x="430" y="280" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">NotFoundComponent</text>
+  <line x1="340" y1="290" x2="520" y2="290" stroke="#1e3a2f" stroke-width="1"/>
+  <text x="430" y="305" text-anchor="middle" fill="#94a3b8" font-size="10">— 404 page —</text>
+  <text x="430" y="319" text-anchor="middle" fill="#94a3b8" font-size="10">RouterLink /</text>
+
+  <!-- ══════════════════════════════════════════
+       SHARED: HeaderComponent
+  ══════════════════════════════════════════ -->
+  <rect x="55" y="430" width="220" height="90" rx="6" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+  <rect x="55" y="430" width="220" height="20" rx="6" fill="#f59e0b"/>
+  <rect x="55" y="443" width="220" height="7" fill="#f59e0b"/>
+  <text x="165" y="444" text-anchor="middle" fill="white" font-size="10" font-weight="700">«shared component»</text>
+  <text x="165" y="462" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">HeaderComponent</text>
+  <line x1="65" y1="472" x2="265" y2="472" stroke="#3d2e00" stroke-width="1"/>
+  <text x="165" y="485" text-anchor="middle" fill="#94a3b8" font-size="10">@Input() title: string</text>
+  <text x="165" y="499" text-anchor="middle" fill="#94a3b8" font-size="10">@Input() kpis: Kpi[]</text>
+  <text x="165" y="513" text-anchor="middle" fill="#94a3b8" font-size="10">interface Kpi &#123; label, value &#125;</text>
+
+  <!-- ══════════════════════════════════════════
+       SHARED: ErrorComponent
+  ══════════════════════════════════════════ -->
+  <rect x="320" y="430" width="220" height="90" rx="6" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+  <rect x="320" y="430" width="220" height="20" rx="6" fill="#f59e0b"/>
+  <rect x="320" y="443" width="220" height="7" fill="#f59e0b"/>
+  <text x="430" y="444" text-anchor="middle" fill="white" font-size="10" font-weight="700">«shared component»</text>
+  <text x="430" y="462" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">ErrorComponent</text>
+  <line x1="330" y1="472" x2="530" y2="472" stroke="#3d2e00" stroke-width="1"/>
+  <text x="430" y="485" text-anchor="middle" fill="#94a3b8" font-size="10">@Input() message: string</text>
+  <text x="430" y="499" text-anchor="middle" fill="#94a3b8" font-size="10">RouterLink /</text>
+
+  <!-- ══════════════════════════════════════════
+       SERVICE: OlympicService
+  ══════════════════════════════════════════ -->
+  <rect x="585" y="430" width="220" height="105" rx="6" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
+  <rect x="585" y="430" width="220" height="20" rx="6" fill="#06b6d4"/>
+  <rect x="585" y="443" width="220" height="7" fill="#06b6d4"/>
+  <text x="695" y="444" text-anchor="middle" fill="white" font-size="10" font-weight="700">«service» providedIn: root</text>
+  <text x="695" y="462" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">OlympicService</text>
+  <line x1="595" y1="472" x2="795" y2="472" stroke="#0c2a30" stroke-width="1"/>
+  <text x="695" y="485" text-anchor="middle" fill="#94a3b8" font-size="10">olympics$: Observable (shareReplay)</text>
+  <line x1="595" y1="493" x2="795" y2="493" stroke="#0c2a30" stroke-width="1"/>
+  <text x="695" y="506" text-anchor="middle" fill="#94a3b8" font-size="10">getOlympics(): Observable&lt;Olympic[]&gt;</text>
+  <text x="695" y="520" text-anchor="middle" fill="#94a3b8" font-size="10">getCountryById(id): Observable&lt;Olympic&gt;</text>
+  <text x="695" y="534" text-anchor="middle" fill="#94a3b8" font-size="10">— HttpClient · Singleton —</text>
+
+  <!-- ══════════════════════════════════════════
+       MODELS
+  ══════════════════════════════════════════ -->
+  <rect x="200" y="600" width="175" height="75" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1.5"/>
+  <rect x="200" y="600" width="175" height="20" rx="6" fill="#334155"/>
+  <rect x="200" y="613" width="175" height="7" fill="#334155"/>
+  <text x="288" y="614" text-anchor="middle" fill="#e2e8f0" font-size="10" font-weight="700">«interface» Olympic</text>
+  <line x1="210" y1="623" x2="365" y2="623" stroke="#1e293b" stroke-width="1"/>
+  <text x="288" y="635" text-anchor="middle" fill="#94a3b8" font-size="9">id: number</text>
+  <text x="288" y="648" text-anchor="middle" fill="#94a3b8" font-size="9">country: string</text>
+  <text x="288" y="661" text-anchor="middle" fill="#94a3b8" font-size="9">participations: Participation[]</text>
+  <text x="288" y="671" text-anchor="middle" fill="#6366f1" font-size="8">olympic.model.ts</text>
+
+  <rect x="435" y="600" width="185" height="75" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1.5"/>
+  <rect x="435" y="600" width="185" height="20" rx="6" fill="#334155"/>
+  <rect x="435" y="613" width="185" height="7" fill="#334155"/>
+  <text x="528" y="614" text-anchor="middle" fill="#e2e8f0" font-size="10" font-weight="700">«interface» Participation</text>
+  <line x1="445" y1="623" x2="610" y2="623" stroke="#1e293b" stroke-width="1"/>
+  <text x="528" y="635" text-anchor="middle" fill="#94a3b8" font-size="9">id · year · city: string</text>
+  <text x="528" y="648" text-anchor="middle" fill="#94a3b8" font-size="9">medalsCount: number</text>
+  <text x="528" y="661" text-anchor="middle" fill="#94a3b8" font-size="9">athleteCount: number</text>
+  <text x="528" y="671" text-anchor="middle" fill="#6366f1" font-size="8">participation.model.ts</text>
+
+  <!-- ══════════════════════════════════════════
+       ARROWS: pages → shared components
+  ══════════════════════════════════════════ -->
+  <!-- Home → Header -->
+  <line x1="145" y1="358" x2="145" y2="430" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <!-- Home → Error -->
+  <line x1="200" y1="358" x2="370" y2="430" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <!-- Country → Header -->
+  <line x1="630" y1="358" x2="230" y2="430" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <!-- Country → Error -->
+  <line x1="660" y1="358" x2="490" y2="430" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+
+  <!-- ══════════════════════════════════════════
+       ARROWS: pages → service (inject)
+  ══════════════════════════════════════════ -->
+  <line x1="270" y1="358" x2="630" y2="430" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#arr-cyan)"/>
+  <text x="460" y="405" fill="#06b6d4" font-size="9" transform="rotate(-18,460,405)">inject + | async</text>
+  <line x1="700" y1="358" x2="700" y2="430" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#arr-cyan)"/>
+  <text x="706" y="398" fill="#06b6d4" font-size="9">inject + | async</text>
+
+  <!-- ARROWS: service → models -->
+  <line x1="650" y1="535" x2="375" y2="600" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+  <line x1="700" y1="535" x2="528" y2="600" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+
+  <!-- Composition: Olympic → Participation -->
+  <line x1="375" y1="637" x2="435" y2="637" stroke="#64748b" stroke-width="1.2"/>
+  <circle cx="375" cy="637" r="3" fill="#64748b"/>
+  <text x="405" y="630" text-anchor="middle" fill="#64748b" font-size="8">1..*</text>
+
+  <!-- Legend -->
+  <rect x="55" y="565" width="120" height="14" rx="3" fill="none" stroke="#10b981" stroke-width="1.5"/>
+  <text x="115" y="576" text-anchor="middle" fill="#6ee7b7" font-size="9">Page component</text>
+  <rect x="195" y="565" width="120" height="14" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="255" y="576" text-anchor="middle" fill="#fcd34d" font-size="9">Shared component</text>
+  <rect x="335" y="565" width="120" height="14" rx="3" fill="none" stroke="#06b6d4" stroke-width="1.5"/>
+  <text x="395" y="576" text-anchor="middle" fill="#67e8f9" font-size="9">Service</text>
+  <rect x="475" y="565" width="120" height="14" rx="3" fill="none" stroke="#64748b" stroke-width="1.5"/>
+  <text x="535" y="576" text-anchor="middle" fill="#94a3b8" font-size="9">Interface / Model</text>
+  <rect x="615" y="565" width="120" height="14" rx="3" fill="none" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="675" y="576" text-anchor="middle" fill="#a5b4fc" font-size="9">Entry point</text>
+
+</svg>
