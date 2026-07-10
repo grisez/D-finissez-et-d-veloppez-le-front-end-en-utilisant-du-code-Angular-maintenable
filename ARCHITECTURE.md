@@ -6,7 +6,7 @@
 - TypeScript strict (no `any`)
 - RxJS (Observables + `async` pipe)
 - Chart.js 4 (pie + line charts)
-- Tailwind CSS (via `@apply` in SCSS only — no utility classes in HTML)
+- Tailwind CSS (directives base/components/utilities uniquement)
 - SCSS + CSS custom properties (design tokens)
 - Angular Router (lazy loading)
 - HttpClient (local JSON file)
@@ -18,20 +18,22 @@
 ```
 src/
 ├── styles/
-│   └── _mixins.scss              # Glass mixin
-├── styles.scss                   # Design tokens, base reset, Tailwind directives
+│   └── _mixins.scss              # Réservé aux futurs mixins partagés
+├── styles.scss                   # Design tokens, reset, spinner, focus-visible
 └── app/
     ├── models/
     │   ├── olympic.model.ts
     │   └── participation.model.ts
     ├── services/
     │   └── olympic.service.ts    # Single source of truth
+    ├── utils/
+    │   └── chart.utils.ts        # buildPieChart, buildLineChart
     ├── components/
     │   ├── header/               # Reusable header (title + KPIs)
     │   └── error/                # Reusable error message
     ├── pages/
-    │   ├── dashboard/            # Route /
-    │   ├── country-detail/       # Route /country/:id
+    │   ├── home/                 # Route /
+    │   ├── country/              # Route /country/:id
     │   └── not-found/            # Route **
     ├── app.component.ts
     ├── app.config.ts
@@ -59,7 +61,7 @@ OlympicService  ──  shareReplay(1)
 Observable
       │
       ▼
-Component (subscribe in ngOnInit)
+Component (| async pipe in template)
       │
       ▼
 Template (@if / @for)
@@ -68,8 +70,11 @@ Template (@if / @for)
 ### Strict TypeScript
 `strict: true` — zero `any` — all data typed via `Olympic` and `Participation` interfaces.
 
-### Tailwind usage
-Tailwind is used **only via `@apply`** inside SCSS files. HTML templates contain no Tailwind utility classes — keeping templates clean and readable.
+### inject() over constructor injection
+All dependencies injected via `inject()` — no constructor parameters.
+
+### No ngOnInit on CountryComponent
+Route param handled reactively via `switchMap` on `route.paramMap`.
 
 ---
 
@@ -97,21 +102,21 @@ interface Olympic {
 
 ### HeaderComponent (reusable)
 - `@Input() title: string`
-- `@Input() kpis: { label: string; value: number }[]`
-- Used on Dashboard and CountryDetail pages
+- `@Input() kpis: Kpi[]` — `{ label: string; value: number }`
+- Used on Home and Country pages
 
 ### ErrorComponent (reusable)
 - `@Input() message: string`
-- Used on Dashboard and CountryDetail pages
+- Used on Home and Country pages
 
-### DashboardPage `/`
-- Pie chart — medals per country (colorblind-safe pastel palette)
+### HomePage `/`
+- Pie chart — medals per country (Figma colors per country)
 - KPIs: number of countries, number of Olympic editions
 - Click on chart slice → navigate to `/country/:id`
 
-### CountryDetailPage `/country/:id`
+### CountryPage `/country/:id`
 - KPIs: participations, total medals, total athletes
-- Line chart — medals per year with gradient fill
+- Line chart — medals per year (straight lines, no fill)
 - Invalid ID → redirect to `/not-found`
 - Back button → `/`
 
@@ -129,7 +134,7 @@ interface Olympic {
 
 | State | Display |
 |-------|---------|
-| Loading | "Loading..." message |
+| Loading | Spinner CSS teal animé |
 | Empty | "No data available" message |
 | Error | `ErrorComponent` with message + back link |
 
@@ -137,39 +142,46 @@ interface Olympic {
 
 ## 8. Design System
 
-Dark glassmorphism theme with CSS custom properties:
+White theme with teal accent (`rgb(4, 130, 142)`).
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--color-primary` | `#6366f1` | Indigo — gradients, accents |
-| `--color-secondary` | `#06b6d4` | Cyan — links, hover |
-| `--color-bg` | `#0f172a` | Page background |
-| `--color-surface` | `rgba(255,255,255,0.06)` | Glass cards |
-| `--color-text` | `#f1f5f9` | Main text (15:1 contrast) |
-| `--color-text-muted` | `#cbd5e1` | Secondary text (7.5:1 contrast) |
+| `--color-teal` | `rgb(4, 130, 142)` | Titre, bordures, liens |
+| `--color-text` | `#111827` | Texte principal |
+| `--color-muted` | `#4b5563` | Texte secondaire (7.1:1 contrast) |
 
-Charts use a **colorblind-safe pastel palette** with hues spaced 60° apart.
+Pie chart colors (Figma spec):
+
+| Pays | Couleur |
+|------|---------|
+| Italy | `rgb(148, 95, 100)` |
+| Spain | `rgb(183, 202, 230)` |
+| United States | `rgb(136, 160, 218)` |
+| Germany | `rgb(120, 60, 81)` |
+| France | `rgb(150, 127, 160)` |
 
 ---
 
 ## 9. Accessibility
 
-- Semantic HTML (`main`, `section`, `header`, `nav`, `figure`, `ul/li`)
+- Semantic HTML (`main`, `section`, `header`, `nav`, `ul/li`)
 - `aria-label` on sections and charts
 - `role="status"` on loading/empty states
 - `role="alert"` on error messages
 - Text contrast WCAG AA compliant (≥ 4.5:1)
-- Focus visible on all interactive elements
+- `:focus-visible` global — outline teal on all interactive elements
 
 ---
 
 ## 10. Responsive Design
 
-| Breakpoint | Layout |
-|------------|--------|
-| ≥ 1024px | Pie chart legend on right |
-| < 1024px | Pie chart legend on bottom |
-| All | Chart.js `responsive: true` — auto-resizes |
+| Breakpoint | Comportement |
+|------------|-------------|
+| ≥ 1200px | Layout centré, chart max-width 680px |
+| 768–1199px | Chart pleine largeur |
+| ≤ 767px | Padding réduit, chart plus petit, KPIs flex-wrap |
+
+Pie chart : padding et taille de police des labels s'ajustent dynamiquement via le plugin Chart.js selon `chart.width`.
 
 ---
 
@@ -177,8 +189,8 @@ Charts use a **colorblind-safe pastel palette** with hues spaced 60° apart.
 
 | Path | Page |
 |------|------|
-| `/` | DashboardPage |
-| `/country/:id` | CountryDetailPage |
+| `/` | HomePage |
+| `/country/:id` | CountryPage |
 | `/not-found` | NotFoundPage |
 | `**` | NotFoundPage |
 
@@ -197,3 +209,4 @@ Atomic commits — convention: `feat:` / `fix:` / `refactor:` / `docs:` / `chore
 - No authentication
 - No backend / database
 - No unit tests
+- No sport detail (version ultérieure)
