@@ -16,12 +16,17 @@ const DRAW_ORDER = ['Spain', 'Italy', 'Germany', 'United States', 'France'];
 // Custom plugin: horizontal lines from circle edge to a fixed x column per side
 const externalLabelsPlugin: Plugin<'pie'> = {
   id: 'externalLabels',
+  beforeLayout(chart) {
+    const w = chart.width;
+    const pad = w < 400 ? 55 : w < 600 ? 85 : 120;
+    chart.options.layout!.padding = { top: 20, right: pad, bottom: 20, left: pad };
+  },
   afterDatasetsDraw(chart) {
     const { ctx, data, chartArea } = chart;
     const meta = chart.getDatasetMeta(0);
     const colors = data.datasets[0].backgroundColor as string[];
-    const LABEL_GAP = 8;
-    const FONT_SIZE = 17;
+    const LABEL_GAP = 6;
+    const FONT_SIZE = chart.width < 400 ? 11 : chart.width < 600 ? 13 : 17;
 
     const xLeftCol  = chartArea.left + 4;
     const xRightCol = chartArea.right - 4;
