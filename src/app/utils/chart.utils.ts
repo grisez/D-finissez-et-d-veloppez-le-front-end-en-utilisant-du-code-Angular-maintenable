@@ -127,13 +127,6 @@ export function buildLineChart(
   years: number[],
   medals: number[]
 ): void {
-  const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
-  const ctx = canvas.getContext('2d')!;
-
-  const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-  gradient.addColorStop(0, 'rgba(4,130,142,0.4)');
-  gradient.addColorStop(1, 'rgba(4,130,142,0.0)');
-
   new Chart(canvasId, {
     type: 'line',
     data: {
@@ -142,15 +135,15 @@ export function buildLineChart(
         label: 'Medals',
         data: medals,
         borderColor: 'rgb(4, 130, 142)',
-        backgroundColor: gradient,
+        backgroundColor: 'transparent',
         borderWidth: 2.5,
         pointBackgroundColor: 'rgb(4, 130, 142)',
         pointBorderColor: '#ffffff',
         pointBorderWidth: 2,
         pointRadius: 5,
         pointHoverRadius: 8,
-        fill: true,
-        tension: 0.35,
+        fill: false,
+        tension: 0,
       }],
     },
     options: {
@@ -169,15 +162,7 @@ export function buildLineChart(
       },
       plugins: {
         legend: { display: false },
-        tooltip: {
-          backgroundColor: 'rgba(15,23,42,0.9)',
-          borderColor: 'rgba(0,0,0,0.1)',
-          borderWidth: 1,
-          titleColor: '#f1f5f9',
-          bodyColor: '#94a3b8',
-          padding: 12,
-          callbacks: { label: (ctx) => ` ${ctx.parsed.y} medals` },
-        },
+        tooltip: { enabled: false },
       },
     },
   });

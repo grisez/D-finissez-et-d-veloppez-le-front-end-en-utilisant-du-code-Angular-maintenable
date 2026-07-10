@@ -6,12 +6,13 @@ import { tap, catchError } from 'rxjs/operators';
 import { OlympicService } from '../../services/olympic.service';
 import { Olympic } from '../../models/olympic.model';
 import { ErrorComponent } from '../../components/error/error.component';
+import { HeaderComponent, Kpi } from '../../components/header/header.component';
 import { buildPieChart } from '../../utils/chart.utils';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [AsyncPipe, ErrorComponent],
+  imports: [AsyncPipe, ErrorComponent, HeaderComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
@@ -20,11 +21,16 @@ export class HomeComponent {
   private olympicService = inject(OlympicService);
 
   public error = '';
-  public totalCountries$ = this.olympicService.getTotalCountries();
-  public totalJOs$ = this.olympicService.getTotalJOs();
+  public headerTitle = 'Medals per country';
+  public headerKpis: Kpi[] = [];
 
   public olympics$: Observable<Olympic[]> = this.olympicService.getOlympics().pipe(
     tap((data) => {
+      const totalJOs = new Set(data.flatMap((o) => o.participations.map((p) => p.year))).size;
+      this.headerKpis = [
+        { label: 'Number of JOs', value: totalJOs },
+        { label: 'Number of countries', value: data.length },
+      ];
       if (data.length > 0) {
         const countries = data.map((o) => o.country);
         const medals = data.map((o) =>
