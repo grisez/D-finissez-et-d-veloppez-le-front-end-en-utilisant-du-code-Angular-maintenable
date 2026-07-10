@@ -6,18 +6,7 @@
       @if (olympics.length === 0) {
         <p class="state-message" role="status">No data available.</p>
       } @else {
-        <h1 class="page-title">Medals per country</h1>
-
-        <div class="kpis">
-          <div class="kpi-block">
-            <span class="kpi-label">Number of JOs</span>
-            <strong class="kpi-value">{{ totalJOs$ | async }}</strong>
-          </div>
-          <div class="kpi-block">
-            <span class="kpi-label">Number of countries</span>
-            <strong class="kpi-value">{{ totalCountries$ | async }}</strong>
-          </div>
-        </div>
+        <app-header [title]="headerTitle" [kpis]="headerKpis"></app-header>
 
         <section class="chart-section" aria-label="Medals per country chart">
           <canvas id="DashboardPieChart" role="img" aria-label="Pie chart showing total medals per country"></canvas>
