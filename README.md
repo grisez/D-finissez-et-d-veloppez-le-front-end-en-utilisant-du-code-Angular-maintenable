@@ -26,11 +26,12 @@ npm install
 ```
 src/
 ├── styles/
-│   └── _mixins.scss          # Mixin glassmorphism
-├── styles.scss               # Design tokens (CSS custom properties) + Tailwind
+│   └── _mixins.scss          # Fichier de mixins (réservé aux futurs usages)
+├── styles.scss               # Design tokens, reset, spinner, focus-visible
 └── app/
     ├── models/               # Interfaces TypeScript (Olympic, Participation)
     ├── services/             # OlympicService — source unique de données
+    ├── utils/                # Fonctions utilitaires (buildPieChart, buildLineChart)
     ├── components/
     │   ├── header/           # Composant réutilisable : titre + KPIs
     │   └── error/            # Composant réutilisable : message d'erreur
@@ -46,10 +47,10 @@ src/
 
 - **Angular 18** — standalone components, control flow (`@if` / `@for`)
 - **TypeScript strict** — zéro `any`, interfaces typées
-- **RxJS** — `Observable`, `shareReplay(1)`, `| async` pipe, `catchError`
+- **RxJS** — `Observable`, `shareReplay(1)`, `| async` pipe, `switchMap`, `catchError`
 - **Chart.js 4** — pie chart (dashboard) + line chart (détail pays)
-- **Tailwind CSS** — via `@apply` dans les fichiers SCSS uniquement
-- **SCSS** — design tokens CSS custom properties, glassmorphism
+- **Tailwind CSS** — directives de base uniquement (`@tailwind base/components/utilities`)
+- **SCSS** — design tokens CSS custom properties
 
 ## Design patterns
 
@@ -62,7 +63,7 @@ src/
 ## Pages
 
 ### Dashboard `/`
-- Pie chart — médailles totales par pays (palette colorblind-safe)
+- Pie chart — médailles totales par pays (couleurs Figma par pays)
 - KPIs : nombre de pays, nombre d'éditions JO
 - Clic sur un pays → navigation vers la page détail
 
@@ -96,4 +97,3 @@ src/
 
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — architecture détaillée, design system, décisions techniques
 - [`notes-architecture.md`](./notes-architecture.md) — analyse du starter code, problèmes identifiés
-- [`docs/architecture-diagram.svg`](./docs/architecture-diagram.svg) — diagramme de composants UML
