@@ -6,20 +6,10 @@
       @if (country.participations.length === 0) {
         <p class="state-message" role="status">No data available for this country.</p>
       } @else {
-        <app-header
-          [title]="titlePage"
-          [kpis]="[
-            { label: 'Number of entries', value: totalEntries },
-            { label: 'Total medals', value: totalMedals },
-            { label: 'Total athletes', value: totalAthletes }
-          ]">
-        </app-header>
+        <app-header [title]="headerTitle" [kpis]="headerKpis"></app-header>
 
         <section class="chart-section" aria-label="Medals per year chart">
-          <figure>
-            <canvas id="countryChart" role="img" [attr.aria-label]="'Line chart showing medal evolution per year for ' + titlePage"></canvas>
-            <figcaption>Medal evolution by year</figcaption>
-          </figure>
+          <canvas id="countryChart" role="img" [attr.aria-label]="'Line chart showing medal evolution per year for ' + headerTitle"></canvas>
         </section>
 
         <nav class="back-nav" aria-label="Page navigation">
