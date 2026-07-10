@@ -28,4 +28,14 @@ export class OlympicService {
       map((olympics) => olympics.find((o) => o.id === id))
     );
   }
+
+  getTotalCountries(): Observable<number> {
+    return this.olympics$.pipe(map((data) => data.length));
+  }
+
+  getTotalJOs(): Observable<number> {
+    return this.olympics$.pipe(
+      map((data) => new Set(data.flatMap((o) => o.participations.map((p) => p.year))).size)
+    );
+  }
 }
