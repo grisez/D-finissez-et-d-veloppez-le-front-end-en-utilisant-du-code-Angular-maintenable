@@ -5,3 +5,5 @@ export interface Participation {
   medalsCount: number;
   athleteCount: number;
 }
+
+export type Participations = Participation[];
