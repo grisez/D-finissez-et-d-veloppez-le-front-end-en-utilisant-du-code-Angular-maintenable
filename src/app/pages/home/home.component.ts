@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { Observable, EMPTY } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { OlympicService } from '../../services/olympic.service';
-import { Olympic } from '../../models/olympic.model';
+import { Olympics } from '../../models/olympic.model';
 import { ErrorComponent } from '../../components/error/error.component';
 import { HeaderComponent, Kpi } from '../../components/header/header.component';
 import { buildPieChart } from '../../utils/chart.utils';
@@ -20,11 +20,11 @@ export class HomeComponent {
   private router = inject(Router);
   private olympicService = inject(OlympicService);
 
-  public error = '';
-  public headerTitle = 'Medals per country';
-  public headerKpis: Kpi[] = [];
+  protected error = '';
+  protected headerTitle = 'Medals per country';
+  protected headerKpis: Kpi[] = [];
 
-  public olympics$: Observable<Olympic[]> = this.olympicService.getOlympics().pipe(
+  protected olympics$: Observable<Olympics> = this.olympicService.getOlympics().pipe(
     tap((data) => {
       const totalJOs = new Set(data.flatMap((o) => o.participations.map((p) => p.year))).size;
       this.headerKpis = [
@@ -41,7 +41,7 @@ export class HomeComponent {
     }),
     catchError((err) => {
       this.error = err.message;
-      return EMPTY;
+      return of([]);
     })
   );
 }

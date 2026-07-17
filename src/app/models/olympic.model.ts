@@ -1,7 +1,9 @@
-import { Participation } from './participation.model';
+import { Participation, Participations } from './participation.model';
 
 export interface Olympic {
   id: number;
   country: string;
-  participations: Participation[];
+  participations: Participations;
 }
+
+export type Olympics = Olympic[];

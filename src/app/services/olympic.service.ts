@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, shareReplay, map } from 'rxjs/operators';
-import { Olympic } from '../models/olympic.model';
+import { Olympic, Olympics } from '../models/olympic.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +10,8 @@ import { Olympic } from '../models/olympic.model';
 export class OlympicService {
   private readonly olympicUrl = './assets/mock/olympic.json';
 
-  private olympics$: Observable<Olympic[]> = this.http
-    .get<Olympic[]>(this.olympicUrl)
+  private olympics$: Observable<Olympics> = this.http
+    .get<Olympics>(this.olympicUrl)
     .pipe(
       shareReplay(1),
       catchError((error) => throwError(() => error))
@@ -19,7 +19,7 @@ export class OlympicService {
 
   constructor(private http: HttpClient) {}
 
-  getOlympics(): Observable<Olympic[]> {
+  getOlympics(): Observable<Olympics> {
     return this.olympics$;
   }
 

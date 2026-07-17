@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Observable, EMPTY } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { switchMap, tap, catchError, map, filter } from 'rxjs/operators';
 import { OlympicService } from '../../services/olympic.service';
 import { Olympic } from '../../models/olympic.model';
@@ -17,16 +17,16 @@ import { buildLineChart } from '../../utils/chart.utils';
   styleUrls: ['./country.component.scss'],
 })
 export class CountryComponent {
-  public error = '';
-  public headerTitle = '';
-  public headerKpis: Kpi[] = [];
+  protected error = '';
+  protected headerTitle = '';
+  protected headerKpis: Kpi[] = [];
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private olympicService = inject(OlympicService);
 
-  public country$: Observable<Olympic | undefined> = this.route.paramMap.pipe(
-    map((params) => Number(params.get('id'))),
+  protected country$: Observable<Olympic | undefined> = this.route.paramMap.pipe(
+    map((params) => { const raw = params.get('id'); return raw !== null ? Number(raw) : NaN; }),
     tap((id) => { if (isNaN(id)) this.router.navigate(['/not-found']); }),
     filter((id) => !isNaN(id)),
     switchMap((id) => this.olympicService.getCountryById(id)),
@@ -49,7 +49,7 @@ export class CountryComponent {
     }),
     catchError((err) => {
       this.error = err.message;
-      return EMPTY;
+      return of(undefined);
     })
   );
 }

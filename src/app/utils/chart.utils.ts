@@ -1,5 +1,5 @@
 import Chart, { Plugin } from 'chart.js/auto';
-import { Olympic } from '../models/olympic.model';
+import { Olympic, Olympics } from '../models/olympic.model';
 
 // Figma spec colors — one per country
 export const COUNTRY_COLORS: Record<string, string> = {
@@ -18,7 +18,7 @@ const externalLabelsPlugin: Plugin<'pie'> = {
   id: 'externalLabels',
   beforeLayout(chart) {
     const w = chart.width;
-    const pad = w < 400 ? 55 : w < 600 ? 85 : 120;
+    const pad = w < 400 ? 65 : w < 600 ? 110 : 120;
     chart.options.layout!.padding = { top: 20, right: pad, bottom: 20, left: pad };
   },
   afterDatasetsDraw(chart) {
@@ -26,10 +26,11 @@ const externalLabelsPlugin: Plugin<'pie'> = {
     const meta = chart.getDatasetMeta(0);
     const colors = data.datasets[0].backgroundColor as string[];
     const LABEL_GAP = 6;
-    const FONT_SIZE = chart.width < 400 ? 11 : chart.width < 600 ? 13 : 17;
+    const FONT_SIZE = chart.width < 400 ? 9 : chart.width < 600 ? 13 : 17;
 
-    const xLeftCol  = chartArea.left + 4;
-    const xRightCol = chartArea.right - 4;
+    const colOffset = chart.width >= 600 ? 40 : 4;
+    const xLeftCol  = chartArea.left + colOffset;
+    const xRightCol = chartArea.right - colOffset;
 
     meta.data.forEach((arc, index) => {
       const { startAngle, endAngle, outerRadius, x: cx, y: cy } =
@@ -63,12 +64,20 @@ const externalLabelsPlugin: Plugin<'pie'> = {
   },
 };
 
+const chartInstances = new Map<string, Chart>();
+
+export function destroyChart(canvasId: string): void {
+  chartInstances.get(canvasId)?.destroy();
+  chartInstances.delete(canvasId);
+}
+
 export function buildPieChart(
-  data: Olympic[],
+  data: Olympics,
   countries: string[],
   medals: number[],
   onCountryClick: (id: number) => void
 ): void {
+  destroyChart('DashboardPieChart');
   // Reorder data to control slice positions (Spain→Italy left, Germany→US→France right)
   const order = DRAW_ORDER.map((name) => countries.indexOf(name)).filter((i) => i >= 0);
   const sortedData      = order.map((i) => data[i]);
@@ -125,6 +134,7 @@ export function buildPieChart(
       },
     },
   });
+  chartInstances.set('DashboardPieChart', chart);
 }
 
 export function buildLineChart(
@@ -132,7 +142,8 @@ export function buildLineChart(
   years: number[],
   medals: number[]
 ): void {
-  new Chart(canvasId, {
+  destroyChart(canvasId);
+  const chart = new Chart(canvasId, {
     type: 'line',
     data: {
       labels: years,
@@ -171,4 +182,5 @@ export function buildLineChart(
       },
     },
   });
+  chartInstances.set(canvasId, chart);
 }
