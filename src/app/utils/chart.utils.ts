@@ -63,12 +63,20 @@ const externalLabelsPlugin: Plugin<'pie'> = {
   },
 };
 
+const chartInstances = new Map<string, Chart>();
+
+export function destroyChart(canvasId: string): void {
+  chartInstances.get(canvasId)?.destroy();
+  chartInstances.delete(canvasId);
+}
+
 export function buildPieChart(
   data: Olympic[],
   countries: string[],
   medals: number[],
   onCountryClick: (id: number) => void
 ): void {
+  destroyChart('DashboardPieChart');
   // Reorder data to control slice positions (Spain→Italy left, Germany→US→France right)
   const order = DRAW_ORDER.map((name) => countries.indexOf(name)).filter((i) => i >= 0);
   const sortedData      = order.map((i) => data[i]);
@@ -125,6 +133,7 @@ export function buildPieChart(
       },
     },
   });
+  chartInstances.set('DashboardPieChart', chart);
 }
 
 export function buildLineChart(
@@ -132,7 +141,8 @@ export function buildLineChart(
   years: number[],
   medals: number[]
 ): void {
-  new Chart(canvasId, {
+  destroyChart(canvasId);
+  const chart = new Chart(canvasId, {
     type: 'line',
     data: {
       labels: years,
@@ -171,4 +181,5 @@ export function buildLineChart(
       },
     },
   });
+  chartInstances.set(canvasId, chart);
 }

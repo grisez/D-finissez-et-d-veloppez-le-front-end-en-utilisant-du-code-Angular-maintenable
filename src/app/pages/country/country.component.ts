@@ -26,7 +26,7 @@ export class CountryComponent {
   private olympicService = inject(OlympicService);
 
   public country$: Observable<Olympic | undefined> = this.route.paramMap.pipe(
-    map((params) => Number(params.get('id'))),
+    map((params) => { const raw = params.get('id'); return raw !== null ? Number(raw) : NaN; }),
     tap((id) => { if (isNaN(id)) this.router.navigate(['/not-found']); }),
     filter((id) => !isNaN(id)),
     switchMap((id) => this.olympicService.getCountryById(id)),
