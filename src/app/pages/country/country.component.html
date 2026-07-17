@@ -1,12 +1,12 @@
 <main>
   @if (error) {
-    <app-error [message]="error"></app-error>
+    <app-error [message]="error" />
   } @else {
     @if (country$ | async; as country) {
       @if (country.participations.length === 0) {
         <p class="state-message" role="status">No data available for this country.</p>
       } @else {
-        <app-header [title]="headerTitle" [kpis]="headerKpis"></app-header>
+        <app-header [title]="headerTitle" [kpis]="headerKpis" />
 
         <section class="chart-section" aria-label="Medals per year chart">
           <canvas id="countryChart" role="img" [attr.aria-label]="'Line chart showing medal evolution per year for ' + headerTitle"></canvas>
